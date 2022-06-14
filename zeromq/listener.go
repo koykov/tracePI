@@ -5,7 +5,6 @@ import (
 	"context"
 
 	"github.com/koykov/fastconv"
-	"github.com/koykov/traceID"
 	"github.com/koykov/traceID/listener"
 	"github.com/pebbe/zmq4"
 )
@@ -17,7 +16,7 @@ type ZeroMQ struct {
 func (l ZeroMQ) Listen(ctx context.Context, out chan []byte) (err error) {
 	conf := l.GetConfig()
 	if len(conf.Topic) == 0 {
-		conf.Topic = traceID.DefaultZeroMQTopic
+		conf.Topic = TopicNative
 	}
 
 	var (
@@ -31,7 +30,7 @@ func (l ZeroMQ) Listen(ctx context.Context, out chan []byte) (err error) {
 		return
 	}
 	if conf.HWM == 0 {
-		conf.HWM = traceID.DefaultZeroMQHWM
+		conf.HWM = DefaultHWM
 	}
 	if err = zsk.SetSndhwm(int(conf.HWM)); err != nil {
 		return
@@ -65,5 +64,5 @@ func (l ZeroMQ) Listen(ctx context.Context, out chan []byte) (err error) {
 }
 
 func (l ZeroMQ) isTopic(p []byte) bool {
-	return bytes.Equal(p, fastconv.S2B(traceID.DefaultZeroMQTopic)) || bytes.Equal(p, fastconv.S2B(traceID.ProtobufZeroMQTopic))
+	return bytes.Equal(p, fastconv.S2B(TopicNative)) || bytes.Equal(p, fastconv.S2B(TopicProtobuf))
 }

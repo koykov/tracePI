@@ -4,7 +4,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/koykov/traceID"
 	"github.com/koykov/traceID/broadcaster"
 	"github.com/pebbe/zmq4"
 )
@@ -22,7 +21,7 @@ func (b *Broadcaster) Broadcast(_ context.Context, p []byte) (n int, err error) 
 	b.once.Do(func() {
 		conf := b.GetConfig()
 		if len(conf.Topic) == 0 {
-			conf.Topic = traceID.DefaultZeroMQTopic
+			conf.Topic = TopicNative
 		}
 		b.topic = []byte(conf.Topic)
 
@@ -33,7 +32,7 @@ func (b *Broadcaster) Broadcast(_ context.Context, p []byte) (n int, err error) 
 			return
 		}
 		if conf.HWM == 0 {
-			conf.HWM = traceID.DefaultZeroMQHWM
+			conf.HWM = DefaultHWM
 		}
 		if b.err = b.sock.SetSndhwm(int(conf.HWM)); b.err != nil {
 			return
