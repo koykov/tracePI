@@ -9,11 +9,11 @@ import (
 	"github.com/pebbe/zmq4"
 )
 
-type ZeroMQ struct {
+type Listener struct {
 	listener.Base
 }
 
-func (l ZeroMQ) Listen(ctx context.Context, out chan []byte) (err error) {
+func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 	conf := l.GetConfig()
 	if len(conf.Topic) == 0 {
 		conf.Topic = TopicNative
@@ -63,6 +63,6 @@ func (l ZeroMQ) Listen(ctx context.Context, out chan []byte) (err error) {
 	}
 }
 
-func (l ZeroMQ) isTopic(p []byte) bool {
+func (l Listener) isTopic(p []byte) bool {
 	return bytes.Equal(p, fastconv.S2B(TopicNative)) || bytes.Equal(p, fastconv.S2B(TopicProtobuf))
 }
