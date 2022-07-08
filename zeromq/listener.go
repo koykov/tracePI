@@ -53,8 +53,18 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 				if p, err = zsk.RecvBytes(0); err != nil || len(p) == 0 {
 					continue
 				}
-				if l.isTopic(p) {
+				switch p {
+				case fastconv.S2B(TopicNative), fastconv.S2B(TopicProtobuf):
 					continue
+				case fastconv.S2B(TopicService):
+					var svc []byte
+					if svc, err = zsk.RecvBytes(0); err != nil || len(p) == 0 {
+						continue
+					}
+					switch svc {
+					case svcPing:
+						// do noting
+					}
 				}
 				break
 			}
@@ -65,4 +75,8 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 
 func (l Listener) isTopic(p []byte) bool {
 	return bytes.Equal(p, fastconv.S2B(TopicNative)) || bytes.Equal(p, fastconv.S2B(TopicProtobuf))
+}
+
+func (l Listener) isService(p []byte) bool {
+	return bytes.Equal(p, fastconv.S2B(TopicService))
 }
