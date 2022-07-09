@@ -4,7 +4,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/koykov/fastconv"
 	"github.com/koykov/traceID/broadcaster"
 	"github.com/pebbe/zmq4"
 )
@@ -52,14 +51,11 @@ func (b *Broadcaster) Broadcast(_ context.Context, p []byte) (n int, err error) 
 	defer func() { n = n1 }()
 
 	conf := b.GetConfig()
-	if conf.Ping == 0 {
-		conf.Ping = DefaultPing
-	}
 	for i := uint(0); i < conf.Ping; i++ {
-		if n1, err = b.sock.SendBytes(fastconv.S2B(TopicService), zmq4.SNDMORE); err != nil {
+		if n1, err = b.sock.SendBytes(btService, zmq4.SNDMORE); err != nil {
 			return
 		}
-		if n1, err = b.sock.SendBytes(svcPing, 0); err != nil {
+		if n1, err = b.sock.SendBytes(bsPing, 0); err != nil {
 			return
 		}
 	}
@@ -73,7 +69,3 @@ func (b *Broadcaster) Broadcast(_ context.Context, p []byte) (n int, err error) 
 
 	return
 }
-
-var (
-	svcPing = []byte("ping")
-)

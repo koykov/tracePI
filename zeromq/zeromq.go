@@ -5,7 +5,13 @@ const (
 	TopicProtobuf = "TRACE_PROTOBUF"
 	TopicService  = "TRACE_SERVICE"
 	DefaultHWM    = 1000
-	DefaultPing   = 3
 )
 
-var _, _, _, _, _ = TopicNative, TopicProtobuf, TopicService, DefaultHWM, DefaultPing
+var btNative, btProtobuf, btService, bsPing []byte
+
+func init() {
+	btNative = []byte(TopicNative)
+	btProtobuf = []byte(TopicProtobuf)
+	btService = []byte(TopicService)
+	bsPing = []byte("ping")
+}

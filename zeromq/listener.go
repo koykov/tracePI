@@ -53,16 +53,18 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 				if p, err = zsk.RecvBytes(0); err != nil || len(p) == 0 {
 					continue
 				}
-				switch p {
-				case fastconv.S2B(TopicNative), fastconv.S2B(TopicProtobuf):
+				switch {
+				case bytes.Equal(p, btNative):
 					continue
-				case fastconv.S2B(TopicService):
+				case bytes.Equal(p, btProtobuf):
+					continue
+				case bytes.Equal(p, btService):
 					var svc []byte
 					if svc, err = zsk.RecvBytes(0); err != nil || len(p) == 0 {
 						continue
 					}
-					switch svc {
-					case svcPing:
+					switch {
+					case bytes.Equal(svc, bsPing):
 						// do noting
 					}
 				}
