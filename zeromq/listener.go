@@ -70,6 +70,7 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 					case bytes.Equal(svc, bsPing):
 						// do noting
 					}
+					continue
 				}
 				break
 			}
