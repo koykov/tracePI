@@ -41,6 +41,9 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 	if err = zsk.SetSubscribe(conf.Topic); err != nil {
 		return
 	}
+	if err = zsk.SetSubscribe(TopicService); err != nil {
+		return
+	}
 
 	for {
 		select {
