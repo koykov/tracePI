@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/koykov/fastconv"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/traceID/listener"
 	"github.com/pebbe/zmq4"
 )
@@ -80,9 +80,9 @@ func (l Listener) Listen(ctx context.Context, out chan []byte) (err error) {
 }
 
 func (l Listener) isTopic(p []byte) bool {
-	return bytes.Equal(p, fastconv.S2B(TopicNative)) || bytes.Equal(p, fastconv.S2B(TopicProtobuf))
+	return bytes.Equal(p, byteconv.S2B(TopicNative)) || bytes.Equal(p, byteconv.S2B(TopicProtobuf))
 }
 
 func (l Listener) isService(p []byte) bool {
-	return bytes.Equal(p, fastconv.S2B(TopicService))
+	return bytes.Equal(p, byteconv.S2B(TopicService))
 }
